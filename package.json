@@ -1,0 +1,25 @@
+{
+  "name": "node-github-contributions-fetcher",
+  "version": "1.0.0",
+  "description": "GitHub Contributions Fetcher for Node.js",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hyde2able/node-github-contributions-fetcher.git"
+  },
+  "keywords": [
+    "Node",
+    "GitHub",
+    "Contributions",
+    "API"
+  ],
+  "author": "pokohide",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hyde2able/node-github-contributions-fetcher/issues"
+  },
+  "homepage": "https://github.com/hyde2able/node-github-contributions-fetcher#readme"
+}
