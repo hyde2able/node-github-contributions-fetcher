@@ -1,11 +1,12 @@
 const axios = require('axios')
 const parseString = require('xml2js').parseString
+const Contribution = require('./contribution')
 
 class GitHubContributionsFetcher {
   constructor() {
   }
 
-  fetch(username) {
+  fetch(username, callback) {
     const url = `https://github.com/users/${username}/contributions`
 
     axios.get(url)
@@ -23,27 +24,29 @@ class GitHubContributionsFetcher {
 
         const width = result.svg.$.width
         const height = result.svg.$.height
-        const contributions = result.svg.g[0].g
+        const data = result.svg.g[0].g
+        let contributions = []
 
-        console.log(width)
-        console.log(height)
-
-        for(let i = 0; i < contributions.length; i++) {
-          const contribution = contributions[i]
-          const x = contribution.$.transform.match(/\d+/)[0]
-          contribution.rect.forEach(rect => {
+        for(let i = 0; i < data.length; i++) {
+          const datum = data[i]
+          const x = datum.$.transform.match(/\d+/)[0]
+          datum.rect.forEach(rect => {
             const y = rect.$.y
             const color = rect.$.fill
             const count = rect.$['data-count']
             const date = rect.$['data-date']
 
-            console.log(x, y, color, count, date)
-            console.log('====')
+            contributions.push(new Contribution(x, y, color, count, date))
           })
         }
+
+        console.log(contributions)
+
       })
     })
   }
+
+
 }
 
 module.exports = GitHubContributionsFetcher
