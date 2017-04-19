@@ -1,8 +1,6 @@
 const axios = require('axios')
 const parseString = require('xml2js').parseString
 
-
-
 class GitHubContributionsFetcher {
   constructor() {
   }
@@ -11,61 +9,41 @@ class GitHubContributionsFetcher {
     const url = `https://github.com/users/${username}/contributions`
 
     axios.get(url)
-    .then(response => {
-      //console.log(response)
-      this.parse(response)
-    })
+    .then(this.parse2json)
     .catch(error => {
       console.log(error)
     })
   }
 
-  parse(body) {
-    parseString(body, (err, result) => {
-      console.log(result)
-      const width = result.svg.$.width
-      const height = result.svg.$.height
-      const data = result.svg.g[0].g
+  parse2json(response) {
+    const body = response.data
+    return new Promise((resolve, reject) => {
+      parseString(body, (err, result) => {
+        if(err) return reject(err)
 
-      console.log(width)
-      console.log(height)
-      console.log(data)
+        const width = result.svg.$.width
+        const height = result.svg.$.height
+        const contributions = result.svg.g[0].g
 
+        console.log(width)
+        console.log(height)
+
+        for(let i = 0; i < contributions.length; i++) {
+          const contribution = contributions[i]
+          const x = contribution.$.transform.match(/\d+/)[0]
+          contribution.rect.forEach(rect => {
+            const y = rect.$.y
+            const color = rect.$.fill
+            const count = rect.$['data-count']
+            const date = rect.$['data-date']
+
+            console.log(x, y, color, count, date)
+            console.log('====')
+          })
+        }
+      })
     })
   }
 }
 
 module.exports = GitHubContributionsFetcher
-
-//
-//     // 並行実行
-//     async.forEach(data, function(datum, callback) {
-//        // datum.$.transform は transform(???, 0)の形式なのでmatchで???を抽出
-//         x = datum.$.transform.match(/\d+/)[0];
-//         datum.rect.forEach( function(rect) {
-//             y = rect.$.y;
-//             color = rect.$.fill;
-//             count = rect.$['data-count'];
-//             date = rect.$['data-date'];
-//
-//             kusa = new contribution(x, y, color, count, date);
-//             contributions.push(kusa);
-//         });
-//         callback();
-//     }, function(err) {
-//         if( err ) console.log(err);
-//         console.log(contributions);
-//         callback(contributions);
-//     });
-// });
-// module.exports = GitHubContributionsFetcher
-//
-//
-// // githubの草のオブジェクト
-// function contribution(x, y, color, count, date){
-//   this.x = x,
-//   this.y = y,
-//   this.color = color,
-//   this.count = count,
-//   this.date = date;
-// }
