@@ -4,7 +4,8 @@
   "description": "GitHub Contributions Fetcher for Node.js",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "test": "mocha --require intelli-espower-loader --timeout 5000 test/*.js"
   },
   "repository": {
     "type": "git",
@@ -16,7 +17,7 @@
     "Contributions",
     "API"
   ],
-  "author": "pokohide",
+  "author": "pokohide <hyde14142@gmail.com> (www.pokohide.me)",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/hyde2able/node-github-contributions-fetcher/issues"
@@ -25,5 +26,11 @@
   "dependencies": {
     "axios": "^0.16.1",
     "xml2js": "^0.4.17"
+  },
+  "devDependencies": {
+    "espower-loader": "^1.2.1",
+    "intelli-espower-loader": "^1.0.1",
+    "mocha": "^3.2.0",
+    "power-assert": "^1.4.2"
   }
 }
